@@ -1,67 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define your types and structures here
+// Dummy typedefs representing the corresponding types in the original code
 typedef struct {
-    // Add required fields for NDSLink and node structures
+    int isLinkStub;   // Stub link indicator
+    int isLinkGateway; // Gateway link indicator
 } NDSLink;
 
 typedef struct {
-    // Add required fields for corresponding link keys and nodes
-} LinkKeyPtr, NodePtr;
+    // Placeholder for the link key
+} LinkKey;
 
-// Example function stubs (you will need to define their logic)
-NDSLink* getLink(const char* key) {
-    // Dummy implementation for demonstration
-    return NULL;
-}
+typedef struct {
+    // Placeholder for the node
+} Node;
 
-NodePtr* getNode(const char* key) {
-    // Dummy implementation for demonstration
-    return NULL;
-}
+// Function prototypes (implement these based on your actual system's functionality)
+NDSLink* getLink(const char* key);
+LinkKey* getConnectedLinkFromIntersection(Node* currentNode, int isOutgoingLink);
+LinkKey* getConnectedLinkBasedOnGateway(Node* node, const char* key, int isOutgoingLink);
+Node* getNode(const char* key);
+void pushBackLinkKey(LinkKey* linkKey);
 
-int isLinkStub(NDSLink* link) {
-    // Return true if the link is a stub
-    return 0;
-}
-
-int isLinkGateway(NDSLink* link) {
-    // Return true if the link is a gateway
-    return 0;
-}
-
-void pushBackLinkKey(LinkKeyPtr* key) {
-    // Add the link key to a list or handle it as needed
-}
-
+// Core function
 void processLink(const char* key, const char* currentNodeKey, int isOutgoingLink) {
-    NDSLink* ndsLink = getLink(key);
+    NDSLink* ndsLink = getLink(key);  // Obtain the link
+    
     if (ndsLink != NULL) {
-        if (isLinkStub(ndsLink)) {
-            LinkKeyPtr* correspondingLinkKeyPtr = NULL;  // Get the corresponding link key
-            if (correspondingLinkKeyPtr != NULL) {
-                pushBackLinkKey(correspondingLinkKeyPtr);
+        if (ndsLink->isLinkStub()) {  // If the link is a stub
+        teh:types::ILinkKeyPtr correspondingLinkKey = getConnectedLinkFromIntersection(currentNodeKey,isOutgoingLink)
+            LinkKey* correspondingLinkKey = getConnectedLinkFromIntersection(NULL, isOutgoingLink);
+            if (correspondingLinkKey != nullptr) {
+                pushBackLinkKey(correspondingLinkKey);
             }
-        } else if (isLinkGateway(ndsLink)) {
-            NodePtr* nodePtr = getNode(currentNodeKey);
-            if (nodePtr != NULL) {
-                LinkKeyPtr* correspondingLinkKeyPtr = NULL;  // Get the link based on gateway direction
-                if (correspondingLinkKeyPtr != NULL) {
-                    pushBackLinkKey(correspondingLinkKeyPtr);
+        } else if (ndsLink->isLinkGateway()) {  // If the link is a gateway
+          teh:types::ILinkKeyPtr nodePtr = m_ndsCdpProxy.getNode(currentNodeKey,{}).m_node;
+            if (nodePtr != nullptr) {
+                LinkKey* correspondingLinkKey = getConnectedLinkBasedOnGateway(nodePtr, key, isOutgoingLink);
+                if (correspondingLinkKey != NULL) {
+                    pushBackLinkKey(correspondingLinkKey);
                 }
             }
         }
     }
 }
 
+// Dummy function implementations
+NDSLink* getLink(const char* key) {
+    static NDSLink dummyLink = {1, 0};
+    return &dummyLink;  // Example implementation
+}
+
+Node* getNode(const char* key) {
+    return malloc(sizeof(Node));  // Replace with your logic
+}
+
+LinkKey* getConnectedLinkFromIntersection(Node* currentNode, int isOutgoingLink) {
+    return malloc(sizeof(LinkKey));  // Replace with your logic
+}
+
+LinkKey* getConnectedLinkBasedOnGateway(Node* node, const char* key, int isOutgoingLink) {
+    return malloc(sizeof(LinkKey));  // Replace with your logic
+}
+
+void pushBackLinkKey(LinkKey* linkKey) {
+    printf("Pushed back link key.\n");  // Example placeholder implementation
+}
+
+// Main for testing
 int main() {
-    // Example usage
-    const char* key = "exampleKey";
-    const char* currentNodeKey = "currentNode";
-    int isOutgoingLink = 1;
-
-    processLink(key, currentNodeKey, isOutgoingLink);
-
+    processLink("exampleKey", "currentNodeKey", 1);
     return 0;
 }
