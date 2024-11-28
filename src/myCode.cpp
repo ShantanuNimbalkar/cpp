@@ -29,13 +29,17 @@ void processLink(const char* key, const char* currentNodeKey, int isOutgoingLink
     if (ndsLink != nullptr) {
         if (ndsLink->isLinkStubble()) {  // If the link is a stub
         teh:types::ILinkKeyPtr correspondingLinkKeyPtr = getConnectedLinkFromIntersection(currentNodeKey,isOutgoingLink)
-            if (correspondingLinkKeyPtr != nullptr) {
-                pushBackLinkKey(correspondingLinkKeyPtr);
+            LinkKey* correspondingLinkKey = getConnectedLinkFromIntersection(nullptr, isOutgoingLink);
+            if (correspondingLinkKey != nullptr) {
+                pushBackLinkKey(correspondingLinkKey);
             }
         } else if (ndsLink->isLinkGateway()) {  // If the link is a gateway
           teh:types::ILinkKeyPtr nodePtr = m_ndsCdpProxy.getNode(currentNodeKey,{}).m_node;
             if (nodePtr != nullptr) {
-                 pushBackLinkKey(correspondingLinkKey);
+                LinkKey* correspondingLinkKey = getConnectedLinkBasedOnGateway(nodePtr, key, isOutgoingLink);
+                if (correspondingLinkKey != nullptr) {
+                    pushBackLinkKey(correspondingLinkKey);
+                }
             }
         }
     }
