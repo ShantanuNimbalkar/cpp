@@ -91,6 +91,7 @@ Address::Address(const struct sockaddr* addr)
   }
 }
 
+
 bool Address::equals(const Address& other, bool with_port) const {
   if (family_ != other.family_) return false;
   if (with_port && port_ != other.port_) return false;
@@ -104,6 +105,12 @@ bool Address::operator<(const Address& other) const {
   if (port_ != other.port_) return port_ < other.port_;
   if (server_name_ != other.server_name_) return server_name_ < other.server_name_;
   return hostname_or_address_ < other.hostname_or_address_;
+}
+void check() 
+{
+ char x[4];
+ char *y = "abcd";
+ strcpy(x, y); // warn 
 }
 
 String Address::hostname_or_address() const {
