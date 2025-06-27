@@ -44,6 +44,12 @@ void processLink(const char* key, const char* currentNodeKey, int isOutgoingLink
         }
     }
 }
+void test() 
+{ 
+    int *p = malloc(1); 
+    free(p); 
+    free(p); // warn: attempt to free released memory 
+}
 
 // Dummy function implementations
 NDSLink* getLink(const char* key) {
